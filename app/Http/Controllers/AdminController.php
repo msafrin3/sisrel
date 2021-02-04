@@ -10,6 +10,8 @@ use App\Models\PermissionRole;
 use App\Models\PermissionUser;
 use App\Models\Role;
 use App\Models\RoleUser;
+use App\Models\Meta;
+use App\Models\MetaData;
 
 class AdminController extends Controller
 {
@@ -65,7 +67,8 @@ class AdminController extends Controller
             // DETACH PERMISSION FROM USER
             $permission->Users()->delete();
             // DELETE PERMISSION
-            // $permission->delete();
+            dd($permission);
+            $permission->delete();
             return response()->json(['status' => 'success', 'message' => 'Permission successfully deleted.']);
         } catch(\Exception $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
@@ -108,6 +111,95 @@ class AdminController extends Controller
             return redirect('admin/roles')->with('success', 'Role updated.');
         } catch(\Exception $e) {
             return back()->with('error', $e->getMessage())->withInput();
+        }
+    }
+
+    public function meta() {
+        $metas = Meta::all();
+        return view('admin.meta', ['metas' => $metas]);
+    }
+
+    public function metaAdd() {
+        return view('admin.meta-add');
+    }
+
+    public function metaStore(Request $request) {
+        try {
+            $data = $request->except(['_token']);
+            Meta::create($data);
+            return redirect('admin/meta')->with('success', 'Meta Added');
+        } catch(\Exception $e) {
+            return back()->with('error', $e->getMessage())->withInput();
+        }
+    }
+
+    public function metaEdit(Meta $meta) {
+        return view('admin.meta-edit', ['meta' => $meta]);
+    }
+
+    public function metaUpdate(Request $request, Meta $meta) {
+        try {
+            $data = $request->except(['_token']);
+            $meta->update($data);
+            return redirect('admin/meta')->with('success', 'Meta Updated.');
+        } catch(\Exception $e) {
+            return back()->with('error', $e->getMessage())->withInput();
+        }
+    }
+
+    public function metaDelete(Request $request) {
+        try {
+            $meta = Meta::find($request->input('meta_id'));
+            $meta->MetaData()->delete();
+            $meta->delete();
+
+            return response()->json(['status' => 'success', 'message' => 'Meta Deleted']);
+        } catch(\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+        }
+    }
+
+    public function metaData() {
+        $metadatas = MetaData::all();
+        return view('admin.metadata', ['metadatas' => $metadatas]);
+    }
+
+    public function metaDataAdd() {
+        $metas = Meta::all();
+        return view('admin.metadata-add', ['metas' => $metas]);
+    }
+
+    public function metaDataStore(Request $request) {
+        try {
+            $data = $request->except(['_token']);
+            MetaData::create($data);
+            return redirect('admin/metadata')->with('success', 'Meta Data Created');
+        } catch(\Exception $e) {
+            return back()->with('error', $e->getMessage())->withInput();
+        }
+    }
+
+    public function metaDataEdit(MetaData $metadata) {
+        $metas = Meta::all();
+        return view('admin.metadata-edit', ['metadata' => $metadata, 'metas' => $metas]);
+    }
+
+    public function metaDataUpdate(Request $request, MetaData $metadata) {
+        try {
+            $data = $request->except(['_token']);
+            $metadata->update($data);
+            return redirect('admin/metadata')->with('success', 'Meta Data Updated.');
+        } catch(\Exception $e) {
+            return back()->with('error', $e->getMessage())->withInput();
+        }
+    }
+
+    public function metaDataDelete(MetaData $metadata) {
+        try {
+            $metadata->delete();
+            return response()->json(['status' => 'success', 'message' => 'Meta Data deleted']);
+        } catch(\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
         }
     }
 

@@ -6,7 +6,6 @@ use Laratrust\Models\LaratrustPermission;
 
 class Permission extends LaratrustPermission
 {
-    protected $table = 'permission';
     public $guarded = ['id'];
 
     protected $fillable = [
