@@ -203,4 +203,105 @@ class AdminController extends Controller
         }
     }
 
+    public function users() {
+        $users = User::withTrashed()->get();
+        return view('admin.users', ['users' => $users]);
+    }
+
+    public function usersAdd() {
+        $roles = Role::all();
+        $permissions = Permission::all();
+        return view('admin.users-add', [
+            'roles' => $roles,
+            'permissions' => $permissions
+        ]);
+    }
+
+    public function usersStore(Request $request) {
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:6|confirmed'
+        ]);
+        try {
+            $data['password'] = bcrypt($data['password']);
+            $user = User::create($data);
+            if($request->has('roles')) {
+                $user->attachRoles($request->input('roles'));
+            }
+            if($request->has('permissions')) {
+                $user->attachPermissions($request->input('permissions'));
+            }
+            return redirect('admin/users')->with('success', 'User Successfully Created.');
+        } catch(\Exception $e) {
+            return back()->with('error', $e->getMessage())->withInput();
+        }
+    }
+
+    public function usersEdit(User $user) {
+        $roles = Role::all();
+        $permissions = Permission::all();
+        return view('admin.users-edit', [
+            'user' => $user,
+            'roles' => $roles,
+            'permissions' => $permissions
+        ]);
+    }
+
+    public function usersUpdate(Request $request, User $user) {
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,'.$user->id,
+            'password' => 'confirmed'
+        ]);
+        try {
+            if($data['password'] == null) {
+                unset($data['password']);
+            } else {
+                $data['password'] = bcrypt($data['password']);
+            }
+            $user->update($data);
+            // DETACH ALL ROLES OF THE USER BEFORE ASSIGN IN AGAIN.
+            $user->detachRoles($user->roles);
+            if($request->has('roles')) {
+                $user->syncRoles($request->input('roles'));
+            }
+            // DETACH ALL PERMISSIONS OF THE USER BEFORE ASSIGN IN AGAIN.
+            $user->detachPermissions($user->permissions);
+            if($request->has('permissions')) {
+                $user->syncPermissions($request->input('permissions'));
+            }
+
+            return redirect('admin/users')->with('success', 'User Successfully Updated.');
+        } catch(\Exception $e) {
+            return back()->with('error', $e->getMessage())->withInput();
+        }
+    }
+
+    public function usersDisable(Request $request) {
+        $user = User::withTrashed()->where('id', $request->input('user_id'))->first();
+        try {
+            if($request->input('is_permanent') == 1) {
+                try { 
+                    $user->detachRoles($user->roles);
+                    $user->detachPermissions($user->permissions);
+                    $user->forceDelete();
+                } catch(\Exception $e) { 
+
+                }
+            } else {
+                if($request->input('is_enable') == 1) {
+                    $user->restore();
+                } else {
+                    // $user->detachRoles($user->roles);
+                    // $user->detachPermissions($user->permissions);
+                    $user->delete();
+                }
+            }
+            return response()->json(['status' => 'success', 'message' => 'User Successfully Deleted.']);
+        } catch(\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+        }
+    }
+
 }
