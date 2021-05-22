@@ -14,9 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group(['middleware' => ['logs']], function() {
-    Route::get('/', function () {
-        return view('welcome');
-    });
+    Route::get('/', 'HomeController@index');
     
     Auth::routes();
     
@@ -60,5 +58,28 @@ Route::group(['middleware' => ['logs']], function() {
         Route::get('admin/metadata/{metadata}', 'AdminController@metaDataEdit');
         Route::post('admin/metadata/{metadata}', 'AdminController@metaDataUpdate');
         Route::post('admin/metadata/{metadata}/delete', 'AdminController@metaDataDelete');
+
+        // PELESEN
+        Route::get('pelesen', 'PelesenController@index');
+        Route::get('pelesen/add', 'PelesenController@create');
+        Route::post('pelesen/add', 'PelesenController@store');
+        Route::get('pelesen/show/{pelesen}', 'PelesenController@show');
+        Route::get('pelesen/edit/{pelesen}', 'PelesenController@edit');
+        Route::post('pelesen/edit/{pelesen}', 'PelesenController@update');
+        Route::post('pelesen/delete/{pelesen}', 'PelesenController@destroy');
+
+        // LEVI
+        Route::get('levi', 'LeviController@index');
+        Route::get('levi/add', 'LeviController@create');
+        Route::post('levi/add', 'LeviController@store');
+        Route::get('levi/edit/{levi}', 'LeviController@edit');
+        Route::post('levi/edit/{levi}', 'LeviController@update');
+        Route::post('levi/delete/{levi}', 'LeviController@destroy');
+
+        Route::get('levi/getRunningNumber', 'LeviController@getRunningNumber');
+
+        Route::get('testmail', function() {
+            \Mail::to('safrinbaharudin@gmail.com')->send(new \App\Mail\reminder());
+        });
     });
 });
