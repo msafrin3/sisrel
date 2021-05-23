@@ -72,6 +72,7 @@ Route::group(['middleware' => ['logs']], function() {
         Route::get('levi', 'LeviController@index');
         Route::get('levi/add', 'LeviController@create');
         Route::post('levi/add', 'LeviController@store');
+        Route::get('levi/show/{levi}', 'LeviController@show');
         Route::get('levi/edit/{levi}', 'LeviController@edit');
         Route::post('levi/edit/{levi}', 'LeviController@update');
         Route::post('levi/delete/{levi}', 'LeviController@destroy');

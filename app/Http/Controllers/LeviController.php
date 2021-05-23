@@ -33,12 +33,24 @@ class LeviController extends Controller
         }
     }
 
+    public function show(Levi $levi) {
+        return view('levi.show', ['levi' => $levi]);
+    }
+
     public function edit(Levi $levi) {
-        return view('levi.edit', ['levi' => $levi]);
+        $pelesens = Pelesen::orderBy('company_name')->get();
+        return view('levi.edit', ['levi' => $levi, 'pelesens' => $pelesens]);
     }
 
     public function update(Request $request, Levi $levi) {
-        dd($request->all());
+        try {
+            $data = $request->except(['_token']);
+            $data['user_id'] = Auth::user()->id;
+            $levi->update($data);
+            return redirect('levi')->with('success', 'Maklumat levi dikemaskini.');
+        } catch(\Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }
     }
 
     public function getRunningNumber(Request $request) {

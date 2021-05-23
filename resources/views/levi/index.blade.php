@@ -29,8 +29,7 @@
                             <th>Berat (Matrik Tan)</th>
                             <th>Jumlah (RM)</th>
                             <th>Penalti</th>
-                            <th>No. Resit</th>
-                            <th>User</th>
+                            <th>Status</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -45,10 +44,27 @@
                             <td>{{ number_format($levi->weight, 2) }}</td>
                             <td>{{ number_format($levi->total_payment, 2) }}</td>
                             <td>{{ number_format($levi->penalty, 2) }}</td>
-                            <td>{{ $levi->resit_no }}</td>
-                            <td>{{ $levi->User->name }}</td>
+                            <td>
+                                @if($levi->status == 'BARU')
+                                <label class="label label-primary">{{ $levi->status }}</label>
+                                @elseif($levi->status == 'DISEMAK')
+                                <label class="label label-warning">{{ $levi->status }}</label>
+                                @elseif($levi->status == 'DIBAYAR')
+                                <label class="label label-success">{{ $levi->status }}</label>
+                                @endif
+                            </td>
                             <td style="text-align:center;white-space:nowrap">
-                                <button type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                                @role('officer')
+                                <a href="{{ url('levi/show/'.$levi->id) }}" class="btn btn-default btn-sm" data-toggle="tooltip" title="View"><i class="fa fa-eye"></i></a>
+                                <a href="{{ url('levi/edit/'.$levi->id) }}" class="btn btn-default btn-sm" data-toggle="tooltip" title="Edit"><i class="fa fa-edit"></i></a>
+                                <button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" title="Delete"><i class="fa fa-trash"></i></button>
+                                @endrole
+                                @role('confirm_officer')
+                                <button type="button" class="btn btn-default btn-sm" data-toggle="tooltip" title="Pengesahan Levi"><i class="fa fa-thumbs-up"></i></button>
+                                @endrole
+                                @role('payment_officer')
+                                <button type="button" class="btn btn-default btn-sm" data-toggle="tooltip" title="Pengesahan Bayaran"><i class="fa fa-money"></i></button>
+                                @endrole
                             </td>
                         </tr>
                         @endforeach
