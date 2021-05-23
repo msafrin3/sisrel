@@ -43,7 +43,7 @@
 
         <header class="main-header">
             <!-- Logo -->
-            <a href="{{ url('') }}/adminlte/index2.html" class="logo">
+            <a href="{{ url('') }}" class="logo">
                 <!-- mini logo for sidebar mini 50x50 pixels -->
                 <span class="logo-mini"><b>S</b>R</span>
                 <!-- logo for regular state and mobile devices -->
@@ -137,6 +137,12 @@
                         <a href="{{ url('levi') }}">
                             <i class="fa fa-briefcase"></i>
                             <span>Daftar Borang Levi</span>
+                        </a>
+                    </li>
+                    <li class="@yield('report')">
+                        <a href="{{ url('report') }}">
+                            <i class="fa fa-line-chart"></i>
+                            <span>Laporan Kewangan</span>
                         </a>
                     </li>
                 </ul>

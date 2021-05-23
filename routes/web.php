@@ -86,5 +86,7 @@ Route::group(['middleware' => ['logs']], function() {
         Route::get('testmail', function() {
             \Mail::to('safrinbaharudin@gmail.com')->send(new \App\Mail\reminder());
         });
+
+        Route::get('report', 'ReportController@index');
     });
 });

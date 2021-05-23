@@ -35,7 +35,7 @@
                                 </tr>
                                 <tr>
                                     <th>Tarikh terima</th>
-                                    <td>{{ date('D M Y', strtotime($levi->date)) }}</td>
+                                    <td>{{ date('d M Y', strtotime($levi->date)) }}</td>
                                 </tr>
                                 <tr>
                                     <th>Berat (Matrik Tan)</th>

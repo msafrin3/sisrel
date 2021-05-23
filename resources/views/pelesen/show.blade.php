@@ -80,6 +80,8 @@
                             <th>Jumlah bayaran (RM)</th>
                             <th>Penalti (RM)</th>
                             <th>No. Resit</th>
+                            <th>Status</th>
+                            <th>Disahkan Oleh</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -94,6 +96,20 @@
                             <td>{{ number_format($levi->total_payment, 2) }}</td>
                             <td>{{ number_format($levi->penalty, 2) }}</td>
                             <td>{{ $levi->resit_no }}</td>
+                            <td>
+                                @if($levi->status == 'BARU')
+                                <label class="label label-primary">{{ $levi->status }}</label>
+                                @elseif($levi->status == 'DISAHKAN')
+                                <label class="label label-warning">{{ $levi->status }}</label>
+                                @elseif($levi->status == 'DIBAYAR')
+                                <label class="label label-success">{{ $levi->status }}</label>
+                                @endif
+                            </td>
+                            <td>
+                                @if($levi->confirm_by != null || $levi->confirm_by != '')
+                                {{ $levi->Confirm->name }} <br/> <i><b>Tarikh Disahkan:</b> {{ date('d M Y', strtotime($levi->confirm_at)) }}</i>
+                                @endif
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>
