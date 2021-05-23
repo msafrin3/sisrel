@@ -60,6 +60,15 @@
                             <th>Keluasan Hektar Ladang</th>
                             <td>{{ $pelesen->area }}</td>
                         </tr>
+                        <tr>
+                            <th colspan="2">Lampiran:</th>
+                        </tr>
+                        @foreach($pelesen->Attachments as $attachment)
+                        <tr>
+                            <th>{{ $attachment->title }}</th>
+                            <td><a href="{{ url('') }}/storage/attachment/{{ $attachment->file_name }}" target="_blank">{{ $attachment->file_name }}</a></td>
+                        </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>

@@ -33,7 +33,13 @@
         <!-- DataTables -->
         <link rel="stylesheet" href="{{ url('') }}/adminlte/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
 
-        <link rel="icon" href="{{ url('') }}/image/logo.png">
+        <link rel="icon" href="{{ url('') }}/images/logo.png">
+
+        <style>
+            hr {
+                border-top: 1px solid #e6e6e6;
+            }
+        </style>
 
         @yield('headerScripts')
     </head>
@@ -184,6 +190,20 @@
         <script src="{{ url('') }}/adminlte/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
         <script src="{{ url('') }}/adminlte/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
         <script>
+        var _months = [
+            { id: 1, name: 'Januari' },
+            { id: 2, name: 'Februari' },
+            { id: 3, name: 'Mac' },
+            { id: 4, name: 'April' },
+            { id: 5, name: 'Mei' },
+            { id: 6, name: 'Jun' },
+            { id: 7, name: 'Julai' },
+            { id: 8, name: 'Ogos' },
+            { id: 9, name: 'September' },
+            { id: 10, name: 'Oktober' },
+            { id: 11, name: 'November' },
+            { id: 12, name: 'Disember' },
+        ];
         $(document).ready(function () {
             $(".datatable").DataTable();
 
@@ -194,6 +214,8 @@
             @if(Session('error'))
             toastr.error("{{ Session('error') }}");
             @endif
+
+            
         })
         </script>
 

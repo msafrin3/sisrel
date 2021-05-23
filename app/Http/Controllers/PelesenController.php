@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Auth;
 use DB;
 use App\Models\SIS\Pelesen;
+use App\Models\SIS\PelesenAttachment;
 
 class PelesenController extends Controller
 {
@@ -21,9 +22,24 @@ class PelesenController extends Controller
 
     public function store(Request $request) {
         try {
-            $data = $request->except(['_token']);
+            $data = $request->except(['_token', 'attachment']);
             $data['user_id'] = Auth::user()->id;
-            Pelesen::create($data);
+
+            $pelesen = Pelesen::create($data);
+
+            if($request->has('attachment')) {
+                foreach($request->attachment as $attachment) {
+                    $file = $attachment['file'];
+                    $file_name = uniqid().'_'.preg_replace('/\+s/', '_', $file->getClientOriginalName());
+                    $file->storeAs('public/attachment/', $file_name);
+
+                    PelesenAttachment::create([
+                        'pelesen_id' => $pelesen->id,
+                        'title' => $attachment['title'],
+                        'file_name' => $file_name
+                    ]);
+                }
+            }
 
             return redirect('pelesen')->with('success', 'Pelesen baru berjaya didaftarkan.');
         } catch(\Exception $e) {
@@ -45,6 +61,20 @@ class PelesenController extends Controller
             $data['user_id'] = Auth::user()->id;
             $pelesen->update($data);
 
+            if($request->has('attachment')) {
+                foreach($request->attachment as $attachment) {
+                    $file = $attachment['file'];
+                    $file_name = uniqid().'_'.preg_replace('/\+s/', '_', $file->getClientOriginalName());
+                    $file->storeAs('public/attachment/', $file_name);
+
+                    PelesenAttachment::create([
+                        'pelesen_id' => $pelesen->id,
+                        'title' => $attachment['title'],
+                        'file_name' => $file_name
+                    ]);
+                }
+            }
+
             return redirect('pelesen')->with('success', 'Maklumat pelesen dikemaskini.');
         } catch(\Exception $e) {
             return back()->with('error', $e->getMessage())->withInput();
@@ -53,7 +83,21 @@ class PelesenController extends Controller
 
     public function destroy(Pelesen $pelesen) {
         try {
-            
+            $pelesen->Attachments()->delete();
+            $pelesen->delete();
+            return response()->json(['status' => 'success', 'message' => 'Berjaya dipadam']);
+        } catch(\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+        }
+    }
+
+    public function deleteAttachment(PelesenAttachment $attachment) {
+        try {
+            if(file_exists(storage_path().'/app/public/attachment/'.$attachment->file_name)) {
+                unlink(storage_path().'/app/public/attachment/'.$attachment->file_name);
+            }
+            $attachment->delete();
+            return response()->json(['status' => 'success', 'Lampiran berjaya dipadam']);
         } catch(\Exception $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
         }

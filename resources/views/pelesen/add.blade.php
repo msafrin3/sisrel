@@ -19,7 +19,7 @@
                 <h3 class="box-title">Borang tambah maklumat pelesen</h3>
             </div>
             <div class="box-body">
-                <form action="" method="post" class="form-horizontal">
+                <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
                     @csrf
                     <div class="box-body">
                         <div class="form-group">
@@ -70,6 +70,23 @@
                                 <input type="number" class="form-control" name="area" placeholder="Keluasan hektar ladang" value="{{ old('area') }}">
                             </div>
                         </div>
+                        <hr/>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2">Muat Naik Lampiran <a href="javascript:;" class="add-attachment" style="margin-left:10px;"><i class="fa fa-plus-circle"></i></a></label>
+                            <div class="col-sm-9 attachment-content">
+                                <div class="row" style="margin-bottom:10px;">
+                                    <div class="col-md-3">
+                                        <input type="text" class="form-control" name="attachment[0][title]" placeholder="Tajuk Lampiran">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="file" class="form-control" name="attachment[0][file]">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button type="button" class="btn btn-danger"><i class="fa fa-trash fa-fw"></i> Padam</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div style="text-align:center;margin-top:20px">
@@ -80,5 +97,33 @@
             </div>
         </div>
     </section>
+
+@endsection
+
+@section('footerScripts')
+
+    <script>
+        var count = 0;
+        $(document).on("click", ".add-attachment", function() {
+            count++;
+            $(".attachment-content").append(
+                '<div class="row attachment-item" style="margin-bottom:10px;">'+
+                    '<div class="col-md-3">'+
+                        '<input type="text" class="form-control" name="attachment['+ count +'][title]" placeholder="Tajuk Lampiran">'+
+                    '</div>'+
+                    '<div class="col-md-3">'+
+                        '<input type="file" class="form-control" name="attachment['+ count +'][file]">'+
+                    '</div>'+
+                    '<div class="col-md-2">'+
+                        '<button type="button" class="btn btn-danger btn-delete-attachment"><i class="fa fa-trash fa-fw"></i> Padam</button>'+
+                    '</div>'+
+                '</div>'
+            )
+        });
+
+        $(document).on("click", ".btn-delete-attachment", function() {
+            $(this).parents(".attachment-item").remove();
+        });
+    </script>
 
 @endsection

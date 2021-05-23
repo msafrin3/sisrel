@@ -68,6 +68,8 @@ Route::group(['middleware' => ['logs']], function() {
         Route::post('pelesen/edit/{pelesen}', 'PelesenController@update');
         Route::post('pelesen/delete/{pelesen}', 'PelesenController@destroy');
 
+        Route::post('pelesen/delete/attachment/{attachment}', 'PelesenController@deleteAttachment');
+
         // LEVI
         Route::get('levi', 'LeviController@index');
         Route::get('levi/add', 'LeviController@create');

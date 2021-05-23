@@ -16,4 +16,8 @@ class Pelesen extends Model
     public function User() {
         return $this->belongsTo('App\User', 'user_id');
     }
+
+    public function Attachments() {
+        return $this->hasMany('App\Models\SIS\PelesenAttachment', 'pelesen_id');
+    }
 }
