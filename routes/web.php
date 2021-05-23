@@ -77,6 +77,10 @@ Route::group(['middleware' => ['logs']], function() {
         Route::post('levi/edit/{levi}', 'LeviController@update');
         Route::post('levi/delete/{levi}', 'LeviController@destroy');
 
+        Route::get('levi/getLevi', 'LeviController@getLevi');
+        Route::post('levi/updateConfirmation', 'LeviController@updateConfirmation');
+        Route::post('levi/updatePayment', 'LeviController@updatePayment');
+
         Route::get('levi/getRunningNumber', 'LeviController@getRunningNumber');
 
         Route::get('testmail', function() {

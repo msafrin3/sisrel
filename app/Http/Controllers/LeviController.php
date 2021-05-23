@@ -8,6 +8,7 @@ use DB;
 use App\User;
 use App\Models\SIS\Levi;
 use App\Models\SIS\Pelesen;
+use Carbon\Carbon;
 
 class LeviController extends Controller
 {
@@ -69,6 +70,37 @@ class LeviController extends Controller
 
     public function destroy(Levi $levi) {
 
+    }
+
+    public function getLevi(Request $request) {
+        $levi = Levi::where('id', $request->input('id'))->with(['User', 'Confirm', 'Payment', 'Pelesen'])->first();
+        return response()->json($levi);
+    }
+
+    public function updateConfirmation(Request $request) {
+        try {
+            $levi = Levi::find($request->input('levi_id'))->update([
+                'confirm_by' => Auth::user()->id,
+                'confirm_at' => new Carbon(),
+                'status' => 'DISAHKAN'
+            ]);
+            return response()->json(['status' => 'success', 'message' => 'Maklumat Levi berjaya disahkan.']);
+        } catch(\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+        }
+    }
+
+    public function updatePayment(Request $request) {
+        try {
+            $levi = Levi::find($request->input('levi_id'))->update([
+                'payment_by' => Auth::user()->id,
+                'payment_at' => new Carbon(),
+                'status' => 'DIBAYAR'
+            ]);
+            return response()->json(['status' => 'success', 'message' => 'Levi telah dibayar']);
+        } catch(\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+        }
     }
 
 }
