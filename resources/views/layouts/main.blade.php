@@ -33,9 +33,11 @@
         <!-- DataTables -->
         <link rel="stylesheet" href="{{ url('') }}/adminlte/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
 
+        <link rel="icon" href="{{ url('') }}/image/logo.png">
+
         @yield('headerScripts')
     </head>
-    <body class="hold-transition skin-blue sidebar-mini">
+    <body class="hold-transition skin-black sidebar-mini">
         <!-- Site wrapper -->
         <div class="wrapper">
 
@@ -45,7 +47,10 @@
                 <!-- mini logo for sidebar mini 50x50 pixels -->
                 <span class="logo-mini"><b>S</b>R</span>
                 <!-- logo for regular state and mobile devices -->
-                <span class="logo-lg"><b>SIS</b>REL</span>
+                <span class="logo-lg">
+                    <img src="{{ url('') }}/images/logo.png" alt="">
+                    <b>SIS</b>REL
+                </span>
             </a>
             <!-- Header Navbar: style can be found in header.less -->
             <nav class="navbar navbar-static-top">
