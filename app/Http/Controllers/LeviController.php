@@ -57,7 +57,9 @@ class LeviController extends Controller
     public function getRunningNumber(Request $request) {
         $date = $request->input('date');
         $number = '';
-        $data = Levi::whereYear('date', date('Y', strtotime($date)))->whereMonth('date', date('m', strtotime($date)))->orderBy('date', 'desc');
+        $data = Levi::whereYear('date', date('Y', strtotime($date)))
+            ->whereMonth('date', date('m', strtotime($date)))
+            ->orderBy('registration_no', 'desc');
         if($data->count() == 0) {
             $number = 500001;
         } else {

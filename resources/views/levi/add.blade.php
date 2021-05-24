@@ -24,7 +24,7 @@
                             @csrf
                             <div class="form-group">
                                 <label>No. Eksais / Pendaftaran</label>
-                                <input type="text" class="form-control" name="registration_no" value="" readonly>
+                                <input type="text" class="form-control" name="registration_no" value="{{ old('registration_no') }}" readonly>
                             </div>
                             <div class="form-group">
                                 <label>Pilih Syarikat / Pelesen</label>

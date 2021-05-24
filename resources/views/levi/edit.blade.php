@@ -73,7 +73,7 @@
     <script>
         $(document).on("change", "input[name=date]", function() {
             var date = $(this).val();
-            // getRunningNumber(date);
+            getRunningNumber(date);
         });
 
         function getRunningNumber(date) {
