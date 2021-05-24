@@ -73,13 +73,13 @@
                         <!-- User Account: style can be found in dropdown.less -->
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <img src="{{ url('') }}/adminlte/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
+                            <img src="{{ url('') }}/images/default-user.png" class="user-image" alt="User Image">
                             <span class="hidden-xs">{{ Auth::user()->name }}</span>
                             </a>
                             <ul class="dropdown-menu">
                                 <!-- User image -->
                                 <li class="user-header">
-                                    <img src="{{ url('') }}/adminlte/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                                    <img src="{{ url('') }}/images/default-user.png" class="img-circle" alt="User Image">
 
                                     <p>
                                     {{ Auth::user()->name }}
@@ -112,7 +112,7 @@
             <section class="sidebar">
                 <div class="user-panel">
                     <div class="pull-left image">
-                        <img src="{{ url('') }}/adminlte/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                        <img src="{{ url('') }}/images/default-user.png" class="img-circle" alt="User Image">
                     </div>
                     <div class="pull-left info">
                         <p>{{ Auth::user()->name }}</p>
