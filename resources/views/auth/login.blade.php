@@ -32,7 +32,7 @@
         <div class="login-box">
             <div class="login-logo">
                 <img src="{{ url('') }}/images/logo.png" alt="" style="width:100px;"><br/>
-                <a href="{{ url('') }}"><b>SIS</b>REL</a>
+                <a href="{{ url('') }}"><b>Sis</b>Rel</a>
             </div>
             <!-- /.login-logo -->
             <div class="login-box-body">
