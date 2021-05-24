@@ -62,7 +62,7 @@
                                 <button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" title="Delete"><i class="fa fa-trash"></i></button>
                                 @endrole
                                 @role('confirm_officer')
-                                <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#modalConfirmation" onclick="getLevi('{{ $levi->id }}')"><i class="fa fa-thumbs-up" data-toggle="tooltip" title="Pengesahan Levi"></i></button>
+                                <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#modalConfirm" onclick="getLevi('{{ $levi->id }}')"><i class="fa fa-thumbs-up" data-toggle="tooltip" title="Pengesahan Levi"></i></button>
                                 @endrole
                                 @role('payment_officer')
                                 <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#modalPayment" onclick="getLevi('{{ $levi->id }}')"><i class="fa fa-money" data-toggle="tooltip" title="Pengesahan Bayaran"></i></button>
