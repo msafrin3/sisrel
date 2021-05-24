@@ -31,6 +31,7 @@
     <body class="hold-transition login-page">
         <div class="login-box">
             <div class="login-logo">
+                <img src="{{ url('') }}/images/logo.png" alt="" style="width:100px;"><br/>
                 <a href="{{ url('') }}"><b>SIS</b>REL</a>
             </div>
             <!-- /.login-logo -->
