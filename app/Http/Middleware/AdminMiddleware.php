@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Auth;
 
 class AdminMiddleware
 {
@@ -15,6 +16,10 @@ class AdminMiddleware
      */
     public function handle($request, Closure $next)
     {
-        return $next($request);
+        if(Auth::user()->hasRole('admin')) {
+            return $next($request);
+        } else {
+            return back()->with('error', 'You are not authorize to access this page.');
+        }
     }
 }

@@ -124,9 +124,11 @@
                     <li class="@yield('home')">
                         <a href="{{ url('') }}"><i class="fa fa-home"></i> <span>Laman Utama</span></a>
                     </li>
+                    @role('admin')
                     <li>
                         <a href="{{ url('admin') }}"><i class="fa fa-user-secret"></i> <span>Admin Panel</span></a>
                     </li>
+                    @endrole
                     <li class="treeview @yield('pelesen')">
                         <a href="#">
                             <i class="fa fa-user"></i> <span>Pelesen</span>
