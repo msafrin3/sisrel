@@ -25,6 +25,7 @@
                         <tr>
                             <th>#</th>
                             <th>No. Eksais</th>
+                            <th>Tarikh Terima</th>
                             <th>Nama Syarikat</th>
                             <th>Berat (Matrik Tan)</th>
                             <th>Jumlah (RM)</th>
@@ -40,6 +41,7 @@
                         <tr>
                             <td>{{ $count }}</td>
                             <td>{{ $levi->registration_no }}</td>
+                            <td>{{ date('d M Y', strtotime($levi->date)) }}</td>
                             <td>{{ $levi->Pelesen->company_name }}</td>
                             <td>{{ number_format($levi->weight, 2) }}</td>
                             <td>{{ number_format($levi->total_payment, 2) }}</td>
