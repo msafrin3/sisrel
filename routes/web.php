@@ -88,7 +88,7 @@ Route::group(['middleware' => ['logs']], function() {
         Route::get('levi/getRunningNumber', 'LeviController@getRunningNumber');
 
         Route::get('testmail', function() {
-            \Mail::to('safrinbaharudin@gmail.com')->send(new \App\Mail\reminder());
+            \Mail::to('safrin.carter94@gmail.com')->send(new \App\Mail\reminder());
         });
 
         Route::get('report', 'ReportController@index');
