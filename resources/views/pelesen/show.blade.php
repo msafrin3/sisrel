@@ -1,6 +1,11 @@
 @extends('layouts.main')
 @section('title', $pelesen->company_name)
 @section('pelesen', 'active')
+@section('headerScripts')
+
+    <link rel="stylesheet" href="{{ url('') }}/plugins/ba3js/ba3.css">
+
+@endsection
 @section('content')
 
     <style>
@@ -23,7 +28,7 @@
     <section class="content">
         <div class="box box-default">
             <div class="box-header with-border">
-                <h3 class="box-title">Maklumat Pelesen</h3>
+                <h3 class="box-title"><i class="fa fa-user fa-fw"></i> Maklumat Pelesen</h3>
             </div>
             <div class="box-body">
                 <table class="table table-bordered">
@@ -76,14 +81,14 @@
 
         <div class="box box-default">
             <div class="box-header with-border">
-                <h3 class="box-title">Rekod pembayaran levi</h3>
+                <h3 class="box-title"><i class="fa fa-money fa-fw"></i> Rekod pembayaran levi</h3>
             </div>
             <div class="box-body">
-                <table class="table table-bordered">
+                <table class="table table-bordered datatable">
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>No. Eksais</th>
+                            <th>No. Daftar</th>
                             <th>Tarikh Pembayaran</th>
                             <th>Berat (Matrik tan)</th>
                             <th>Jumlah bayaran (RM)</th>
@@ -100,7 +105,7 @@
                         <tr>
                             <td>{{ $count }}</td>
                             <td>{{ $levi->registration_no }}</td>
-                            <td>{{ date('D M Y', strtotime($levi->date)) }}</td>
+                            <td>{{ date('d M Y', strtotime($levi->date)) }}</td>
                             <td>{{ number_format($levi->weight, 2) }}</td>
                             <td>{{ number_format($levi->total_payment, 2) }}</td>
                             <td>{{ number_format($levi->penalty, 2) }}</td>
@@ -126,9 +131,190 @@
             </div>
         </div>
 
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title"><i class="fa fa-line-chart fa-fw"></i> Laporan Bulanan & Tahunan</h3>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div id="monthly"></div>
+                    </div>
+                    <div class="col-md-12">
+                        <div id="yearly"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="print-content" style="margin-top: 20px;text-align:center">
             <button type="button" class="btn btn-default" onclick="window.print()"><i class="fa fa-print fa-fw"></i> Print</button>
         </div>
     </section>
+
+@endsection
+
+@section('footerScripts')
+
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script>
+        $(document).ready(function() {
+            getReport();
+        });
+
+        function getReport() {
+            $.ajax({
+                url: "{{ url('pelesen/getReport') }}",
+                type: "GET",
+                data: "pelesen_id={{ $pelesen->id }}",
+                success: function(response) {
+                    console.log(response);
+
+                    var monthly_category = [];
+                    var monthly_data_weight = [];
+                    var monthly_data_payment = [];
+                    var monthly_data_penalty = [];
+                    
+                    $.each(response.monthly, function(index,value) {
+                        monthly_category.push(value.month_name + ' ' + value.year_short);
+                        monthly_data_weight.push(parseFloat(value.total_weight));
+                        monthly_data_payment.push(parseFloat(value.total_payment));
+                        monthly_data_penalty.push(parseFloat(value.total_penalty));
+                    });
+
+                    Highcharts.chart('monthly', {
+                        credits: {
+                            enabled: false
+                        },
+                        exporting: {
+                            enabled: false
+                        },
+                        chart: {
+                            type: 'column'
+                        },
+                        title: {
+                            text: 'Laporan Bulanan'
+                        },
+                        subtitle: {
+                            text: ''
+                        },
+                        xAxis: {
+                            categories: monthly_category,
+                            crosshair: true
+                        },
+                        yAxis: {
+                            min: 0,
+                            title: {
+                                text: 'Rainfall (mm)'
+                            }
+                        },
+                        tooltip: {
+                            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                                '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+                            footerFormat: '</table>',
+                            shared: true,
+                            useHTML: true
+                        },
+                        plotOptions: {
+                            column: {
+                                pointPadding: 0.2,
+                                borderWidth: 0
+                            }
+                        },
+                        series: [{
+                            name: 'Weight (MT)',
+                            data: monthly_data_weight
+
+                        }, {
+                            name: 'Payment (RM)',
+                            data: monthly_data_payment,
+                            color: 'green'
+
+                        }, {
+                            name: 'Penalty (RM)',
+                            data: monthly_data_penalty,
+                            color: 'red'
+                        }]
+                    });
+
+                    // yearly ========
+                    var yearly_category = [];
+                    var yearly_data_weight = [];
+                    var yearly_data_payment = [];
+                    var yearly_data_penalty = [];
+                    
+                    $.each(response.yearly, function(index,value) {
+                        yearly_category.push(value.year_date);
+                        yearly_data_weight.push(parseFloat(value.total_weight));
+                        yearly_data_payment.push(parseFloat(value.total_payment));
+                        yearly_data_penalty.push(parseFloat(value.total_penalty));
+                    });
+
+                    Highcharts.chart('yearly', {
+                        credits: {
+                            enabled: false
+                        },
+                        exporting: {
+                            enabled: false
+                        },
+                        chart: {
+                            type: 'column'
+                        },
+                        title: {
+                            text: 'Laporan Tahunan'
+                        },
+                        subtitle: {
+                            text: ''
+                        },
+                        xAxis: {
+                            categories: yearly_category,
+                            crosshair: true
+                        },
+                        yAxis: {
+                            min: 0,
+                            title: {
+                                text: 'Rainfall (mm)'
+                            }
+                        },
+                        tooltip: {
+                            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                                '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+                            footerFormat: '</table>',
+                            shared: true,
+                            useHTML: true
+                        },
+                        plotOptions: {
+                            column: {
+                                pointPadding: 0.2,
+                                borderWidth: 0
+                            }
+                        },
+                        series: [{
+                            name: 'Weight (MT)',
+                            data: yearly_data_weight
+
+                        }, {
+                            name: 'Payment (RM)',
+                            data: yearly_data_payment,
+                            color: 'green'
+
+                        }, {
+                            name: 'Penalty (RM)',
+                            data: yearly_data_penalty,
+                            color: 'red'
+                        }]
+                    });
+                },
+                error: function(err) {
+                    console.log(err);
+                }
+            });
+        }
+    </script>
 
 @endsection

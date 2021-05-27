@@ -44,7 +44,7 @@
                             </div>
                             <div class="form-group">
                                 <label>Jumlah Bayaran (RM)</label>
-                                <input type="number" step="any" name="total_payment" class="form-control" value="{{ old('total_payment') }}">
+                                <input type="number" step="any" name="total_payment" class="form-control" value="{{ old('total_payment') }}" readonly>
                             </div>
                             <div class="form-group">
                                 <label>Jumlah Penalti (RM)</label>
@@ -74,6 +74,11 @@
         $(document).on("change", "input[name=date]", function() {
             var date = $(this).val();
             getRunningNumber(date);
+        });
+
+        $(document).on("change", "input[name=weight]", function() {
+            var total = ($(this).val() == null || $(this).val() == '' ? 0 : parseFloat($(this).val())) * 51.6;
+            $("input[name=total_payment]").val(total.toFixed(2));
         });
 
         function getRunningNumber(date) {

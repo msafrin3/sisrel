@@ -103,4 +103,42 @@ class PelesenController extends Controller
         }
     }
 
+    public function getReport(Request $request) {
+        $monthly = DB::select("select
+            id,
+            pelesen_id,
+            date,
+            month(date) month_date,
+            year(date) year_date,
+            left(date_format(date, '%M'), 3) month_name,
+            date_format(date, '%y') year_short,
+            sum(weight) total_weight,
+            sum(total_payment) total_payment,
+            sum(penalty) total_penalty
+            from levi
+            where pelesen_id = ".$request->input('pelesen_id')."
+            and confirm_by is not null
+            group by month(date), year(date)
+            order by year(date), month(date);");
+
+        $yearly = DB::select("select
+            id,
+            pelesen_id,
+            date,
+            month(date) month_date,
+            year(date) year_date,
+            left(date_format(date, '%M'), 3) month_name,
+            date_format(date, '%y') year_short,
+            sum(weight) total_weight,
+            sum(total_payment) total_payment,
+            sum(penalty) total_penalty
+            from levi
+            where pelesen_id = ".$request->input('pelesen_id')."
+            and confirm_by is not null
+            group by year(date)
+            order by year(date);");
+
+        return response()->json(['monthly' => $monthly, 'yearly' => $yearly]);
+    }
+
 }
