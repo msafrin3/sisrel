@@ -40,7 +40,11 @@
                             </div>
                             <div class="form-group">
                                 <label>Berat (Matrik Tan)</label>
-                                <input type="number" step="any" name="weight" class="form-control" value="{{ $levi->weight }}">
+                                <input type="number" step="any" name="weight" class="form-control changes" value="{{ $levi->weight }}">
+                            </div>
+                            <div class="form-group">
+                                <label>Harga Per Matrik Tan</label>
+                                <input type="number" step="any" name="price" class="form-control changes price-per-weight" value="{{ $levi->price }}">
                             </div>
                             <div class="form-group">
                                 <label>Jumlah Bayaran (RM)</label>
@@ -76,8 +80,15 @@
             getRunningNumber(date);
         });
 
-        $(document).on("change", "input[name=weight]", function() {
-            var total = ($(this).val() == null || $(this).val() == '' ? 0 : parseFloat($(this).val())) * 51.6;
+        // $(document).on("change", "input[name=weight]", function() {
+        //     var total = ($(this).val() == null || $(this).val() == '' ? 0 : parseFloat($(this).val())) * 51.6;
+        //     $("input[name=total_payment]").val(total.toFixed(2));
+        // });
+
+        $(document).on("change", ".changes", function() {
+            var weight = ($("input[name=weight]").val() == null || $("input[name=weight]").val() == '' ? 0 : parseFloat($("input[name=weight]").val()));
+            var price = ($("input[name=price]").val() == null || $("input[name=price]").val() == '' ? 0 : parseFloat($("input[name=price]").val()));
+            var total = price * weight;
             $("input[name=total_payment]").val(total.toFixed(2));
         });
 
