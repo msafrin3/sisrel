@@ -208,7 +208,7 @@
                         yAxis: {
                             min: 0,
                             title: {
-                                text: 'Rainfall (mm)'
+                                enabled: false
                             }
                         },
                         tooltip: {
@@ -277,7 +277,7 @@
                         yAxis: {
                             min: 0,
                             title: {
-                                text: 'Rainfall (mm)'
+                                enabled: false
                             }
                         },
                         tooltip: {
