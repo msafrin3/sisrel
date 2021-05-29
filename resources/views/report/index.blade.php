@@ -49,7 +49,11 @@
         @if(isset($_GET['year']))
         <div class="box box-default">
             <div class="box-header with-border">
-                <h3 class="box-title">Laporan Kewangan Levi bagi bulan <b>Januari 2021</b></h3>
+                <?php
+                $dateObj   = DateTime::createFromFormat('!m', $_GET['month']);
+                $monthName = $dateObj->format('F');
+                ?>
+                <h3 class="box-title">Laporan Kewangan Levi bagi bulan <b>{{ $monthName.' '.$_GET['year'] }}</b></h3>
             </div>
             <div class="box-body">
                 <table class="table table-bordered">
@@ -82,9 +86,9 @@
                             <td>{{ $d->registration_no }}</td>
                             <td>{{ $d->Pelesen->company_name }}</td>
                             <td>{{ date('d M Y', strtotime($d->date)) }}</td>
-                            <td>{{ number_format($d->weight, 2) }}</td>
-                            <td>{{ number_format($d->penalty, 2) }}</td>
-                            <td>{{ number_format($d->total_payment, 2) }}</td>
+                            <td style="text-align:right">{{ number_format($d->weight, 2) }}</td>
+                            <td style="text-align:right">{{ number_format($d->penalty, 2) }}</td>
+                            <td style="text-align:right">{{ number_format($d->total_payment, 2) }}</td>
                             <td>{{ $d->Payment->name }}</td>
                         </tr>
                         @endforeach
