@@ -71,7 +71,12 @@ class LeviController extends Controller
     }
 
     public function destroy(Levi $levi) {
-
+        try {
+            $levi->delete();
+            return response()->json(['status' => 'success', 'message' => 'Levi deleted.']);
+        } catch(\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+        }
     }
 
     public function getLevi(Request $request) {

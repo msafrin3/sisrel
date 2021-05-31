@@ -59,7 +59,7 @@
                                 <a href="{{ url('levi/show/'.$levi->id) }}" class="btn btn-default btn-sm" data-toggle="tooltip" title="View"><i class="fa fa-eye"></i></a>
                                 @role('officer')
                                 <a href="{{ url('levi/edit/'.$levi->id) }}" class="btn btn-default btn-sm" data-toggle="tooltip" title="Edit"><i class="fa fa-edit"></i></a>
-                                <button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" title="Delete"><i class="fa fa-trash"></i></button>
+                                <button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" title="Delete" onclick="deleteLevi('{{ $levi->id }}')"><i class="fa fa-trash"></i></button>
                                 @endrole
                                 @role('confirm_officer')
                                 <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#modalConfirm" onclick="getLevi('{{ $levi->id }}')"><i class="fa fa-thumbs-up" data-toggle="tooltip" title="Pengesahan Levi"></i></button>
@@ -215,6 +215,28 @@
                     },
                     error: function(err) {
                         console.log(err);
+                    }
+                });
+            }
+        }
+
+        function deleteLevi(id) {
+            var r = confirm("Padam maklumat levi?");
+            if(r) {
+                $.ajax({
+                    url: "{{ url('') }}/levi/delete/" + id,
+                    type: "POST",
+                    data: "_token={{csrf_token()}}",
+                    success: function(response) {
+                        if(response.status == 'success') {
+                            toastr.success(response.message);
+                            location.reload();
+                        } else {
+                            toastr.error(response.message);
+                        }
+                    },
+                    error: function(err) {
+                        toastr.error(err);
                     }
                 });
             }
